@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOK</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <style>
+        #pdfView{
+            margin-left:auto;
+            margin-right:auto;
+        }
+        #main-div{
+            width:1200px;
+            height:2000px;
+            margin-top:100px;
+            margin-left:auto;
+            margin-right:auto;
+            display:flex;
+            flex-direction:column;
+        }
+        .main-div-head{
+            display:flex;
+            height:400px;
+            justify-content: space-between;
+        }
+        .head-cover{
+            width:280px;
+            overflow:hidden;
+        }
+        .head-cover img{
+            height:400px;
+        }
+        .head-tags{
+            padding:20px;
+            width:350px;
+        }
+        .head-details{
+            padding:20px;
+            display:flex;
+            flex-direction:column;
+        }
+        #page-control{
+            display:flex;
+            justify-content: center;
+        }
+        #page-control a{
+            margin:6px;
+        }
+        #control-group{
+            position:absolute;
+            right:20px;
+            top:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="control-group">
+        <button id="control-delete" class="btn btn-primary">delete</button>
+    </div>
+    <div id="main-div" class="card" th:object="${resource}">
+        <div class="main-div-head">
+            <div class="head-cover">
+                <img th:src="'/img/' + *{coverPath}">
+            </div>
+            <div class="head-tags">
+                <div style="height:250px;overflow:hidden;">
+                    <div th:each="tag:${tags}">
+                        <label th:text="${tag.key}"></label>
+                        <a th:each="tagEntity:${tag.value}">
+                            <label th:text="${tagEntity.tag}"></label>
+                            <a th:href="'/tag/deleteTag/' + ${tagEntity.id}">x</a>
+                            <!-- <a th:href="'/tag/updateTag/' + ${tagEntity.id} + '?tagType=0000&tag=fuk&id'+${}">x</a> -->
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <form action="/tag/addTag" method="get">
+                        <div class="form-group">
+                            <label for="tag">tags</label>
+                            <input type="text" name="tag" class="form-control" id="tag">
+                        </div>
+                        <input type="text" th:value="*{rid}" hidden readonly name="rid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="head-details">
+                <h1 th:text="*{name}"></h1>
+                <p th:text="*{uploadDate}"></p>
+                <p th:text="*{filesSize}"></p>
+                <p th:text="*{description}"></p>
+                <h3 th:text="*{type}"></h3>
+            </div>
+        </div>
+        <div class="main-div-body">
+            <div id="content" th:switch="${type}">
+                <div th:case="'PDF'">
+                    <a class="btn btn-primary" th:href="'/' + ${type}+ '/' + ${resource.contentPath} + '.pdf'">view</a>
+                    <iframe width="100%" height="1000px" id="pdfView" th:src="'/' + ${type}+ '/' + ${resource.contentPath} + '.pdf'"></iframe>
+                </div>
+
+                <div th:case="'MD'">
+                    <a class="btn btn-primary" href="">view</a>
+                    <div id="mdView" th:utext="${text}"></div>
+                </div>
+
+                <div th:case="'TXT'">
+                    <a class="btn btn-primary" href="">view</a>
+                    <div id="textView" th:utext="${text}"></div>
+                </div>
+            </div>
+            <div id="page-control" th:utext="${controlBtn}"></div>
+        </div>
+    </div>
+
+</body>
+</html>

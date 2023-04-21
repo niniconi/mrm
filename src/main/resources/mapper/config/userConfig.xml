@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.config.UserConfig">
+    <update id="setProperty">
+        UPDATE user_config `value`=#{value} WHERE `uid`=#{uid} AND `key`=#{key};
+    </update>
+</mapper>

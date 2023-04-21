@@ -1,0 +1,15 @@
+#!/bin/bash
+CONTENT=..
+
+echo -n "all:"
+(find $CONTENT -name "*.java" && find $CONTENT -name "*.js" && find $CONTENT -name "*.html" && find $CONTENT -name "*.css" && find $CONTENT -name "*.xml") | xargs cat | wc -l
+echo -n -e "\tcss:"
+find $CONTENT -name "*.css" | xargs cat | wc -l
+echo -n -e "\thtml:"
+find $CONTENT -name "*.html" | xargs cat | wc -l
+echo -n -e "\tjs:"
+find $CONTENT -name "*.js" | xargs cat | wc -l
+echo -n -e "\tjava:"
+find $CONTENT -name "*.java" | xargs cat | wc -l
+echo -n -e "\txml:"
+find $CONTENT -name "*.xml" | xargs cat | wc -l

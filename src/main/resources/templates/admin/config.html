@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>config</title>
+</head>
+<body>
+    <ul>
+        <li th:each="property:${configs}">
+            <label th:text="${property.key}"></label>=
+            <label th:text="${property.value}"></label>
+        </li>
+    </ul>
+</body>
+</html>

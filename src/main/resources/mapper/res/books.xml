@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.resource.BooksMapper">
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from books_res;
+    </select>
+    <select id="getBook" resultType="com.niniconi.mrm.entity.resource.BooksEntity">
+        SELECT
+            res.rid,
+            res.name,
+            res.file_size AS filesSize,
+            res.description,
+            res.upload_date AS uploadDate,
+            res.cover AS coverPath,
+            res.content AS contentPath,
+            res.author,
+            res.type,
+            book.book_file_type AS fileType
+        FROM resource res JOIN books_res book ON res.rid=book.rid WHERE res.rid=#{rid};
+    </select>
+    <insert id="createBook">
+        INSERT INTO books_res(rid,book_file_type) VALUE(#{rid},#{type});
+    </insert>
+    <select id="getType" resultType="com.niniconi.mrm.entity.enumeration.BookType">
+        SELECT book_file_type AS type from books_res WHERE rid = #{rid};
+    </select>
+    <delete id="delete">
+        DELETE FROM books_res WHERE rid=#{rid};
+    </delete>
+</mapper>

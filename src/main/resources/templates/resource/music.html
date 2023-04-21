@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${resource.name}"></title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/jquery.slim.min.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <style>
+        .state-play .player-control-pause{
+            display: none;
+        }
+        .state-pause .player-control-play{
+            display: none;
+        }
+        #time-schedule{
+            width:500px;
+            height:6px;
+            border-radius: 3px;
+            background-color: #000000;
+            overflow: hidden;
+        }
+        #time-schedule-0{
+            position: relative;
+            background-color: #ffffff;
+            height: 100px;
+        }
+        #player-control-panel{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+        }
+    </style>
+</head>
+<body>
+    <audio id="music" th:src="'/music/'+${resource.contentPath}">
+        <p>不支持</p>
+    </audio>
+    <div id="main-div" class="" th:object="${resource}">
+        <div class="main-div-head">
+            <div class="head-cover">
+                <img th:src="'/img/' + *{coverPath}">
+            </div>
+            <div class="head-tags">
+                <div style="height:250px;overflow:hidden;">
+                    <div th:each="tag:${tags}">
+                        <label th:text="${tag.key}"></label>
+                        <a th:each="tagEntity:${tag.value}">
+                            <label th:text="${tagEntity.tag}"></label>
+                            <a th:href="'/tag/deleteTag/' + ${tagEntity.id}">x</a>
+                            <!-- <a th:href="'/tag/updateTag/' + ${tagEntity.id} + '?tagType=0000&tag=fuk&id'+${}">x</a> -->
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <form action="/tag/addTag" method="get" onsubmit="return submitAddTag(this)">
+                        <div class="form-group">
+                            <label for="tag">tags</label>
+                            <input type="text" name="tag" class="form-control" id="tag">
+                        </div>
+                        <input type="text" th:value="*{rid}" hidden readonly name="rid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="head-details">
+                <h1 th:text="*{name}"></h1>
+                <p th:text="*{uploadDate}"></p>
+                <p th:text="*{filesSize}"></p>
+                <p th:text="*{description}"></p>
+                <h3 th:text="*{type}"></h3>
+            </div>
+    </div>
+    <div id="player-control-panel" class="shadow1">
+        <div>
+            <div id="player-control" class="state-pause">
+                <lord-icon class="player-control-pause" src="https://cdn.lordicon.com/xddtsyvc.json" trigger="click" state="morph-pause-play"></lord-icon>
+                <lord-icon class="player-control-play" src="https://cdn.lordicon.com/xddtsyvc.json" trigger="click" state="morph-play-pause"></lord-icon>
+            </div>
+        </div>
+        <div id="schedule">
+            <label id="time-label"></label>
+            <div id="time-schedule">
+                <div id="time-schedule-0"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script th:inline="javascript">
+    const music = document.querySelector("#music");
+    var playSchedule=0;//0%-100%
+    musicPlay = function(element){
+        element.className = "state-play";
+        music.play();
+    }
+    musicPause = function(element){
+        element.className = "state-pause";
+        music.pause();
+    }
+    setSchedule = function(){
+        $("#time-schedule-0").css("width",playSchedule*100+"%");
+    }
+    $("#player-control").click((e)=>{
+        if($(e.currentTarget).hasClass("state-play")){
+            musicPause(e.currentTarget);
+        }else if($(e.currentTarget).hasClass("state-pause")){
+            musicPlay(e.currentTarget);
+        }
+    })
+    setInterval(()=>{
+        const currentTime = music.currentTime;
+        const duration = music.duration;
+
+        $("#time-label").text(transTime(currentTime)+'/'+transTime(duration));
+
+        playSchedule = currentTime/duration;
+        setSchedule();
+        if(currentTime == duration){
+            //播放完成的动作
+            console.log("播放完成");
+        }
+    },200);
+</script>
+</html>

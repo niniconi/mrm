@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.PluginMapper">
+    <sql id="sql-entity-full">
+        jar_class as className,
+        jar_path as jarPath,
+        jar_name as name
+    </sql>
+    <insert id="addPlugin">
+        INSERT INTO plugins(jar_class,jar_path,jar_name) VALUES(#{className},#{jarPath},#{name});
+    </insert>
+    <delete id="deletePlugin">
+        DELETE FROM plugins WHERE jar_class=#{className};
+    </delete>
+    <select id="getAllPlugin" resultType="com.niniconi.mrm.entity.PluginEntity">
+        SELECT <include refid="sql-entity-full"/> FROM plugins;
+    </select>
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM plugins WHERE jar_class=#{className};
+    </select>
+</mapper>

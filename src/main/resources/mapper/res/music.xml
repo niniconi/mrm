@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.resource.MusicMapper">
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM music_res;
+    </select>
+    <insert id="createMusic">
+        INSERT INTO music_res(rid,mv) VALUE(#{rid},#{mv});
+    </insert>
+    <select id="getMusic" resultType="com.niniconi.mrm.entity.resource.MusicEntity">
+        SELECT
+            res.rid,
+            res.name,
+            res.file_size AS filesSize,
+            res.description,
+            res.upload_date AS uploadDate,
+            res.cover AS coverPath,
+            res.content AS contentPath,
+            res.author,
+            res.type,
+            music.mv
+        FROM resource res JOIN music_res music ON res.rid=music.rid WHERE res.rid=#{rid};
+    </select>
+    <delete id="delete">
+        DELETE FROM music_res WHERE rid=#{rid};
+    </delete>
+</mapper>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>浏览</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.slim.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <style>
+        #main-content{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:flex-start;
+        }
+        #main-content .card{
+            margin:20px;
+            height:300px;
+            width:200px;
+            overflow: hidden;
+        }
+        #main-content .card .name{
+            font-size: 16px;
+            color: #000000;
+            display: block;
+            text-align: center;
+        }
+        #main-content .card .cover{
+            height:200px;
+            overflow:hidden;
+            background-color:var(--image-bg-color);
+            line-height:200px;
+            text-align:center;
+        }
+        #main-content .card .crad-body{
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav" class="shadow1 nav-panel-pc">
+        <div class="options">
+            <a class="nav" href="/index.html">
+                <div><lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="click"></lord-icon></div>
+                <div class="label"><label style="display: none;">主页</label></div>
+            </a>
+            <a class="nav" href="/uploadPage">
+                <div><lord-icon src="https://cdn.lordicon.com/wfadduyp.json" trigger="click"></lord-icon></div>
+                <div class="label"><label style="display: none;">上传</label></div>
+            </a>
+            <a class="nav choose" href="/resource/list?page=0">
+                <div><lord-icon src="https://cdn.lordicon.com/ofwpzftr.json" trigger="click"></lord-icon></div>
+                <div class="label"><label style="display: none;">全部</label></div>
+            </a>
+            <a class="control">
+                <div><lord-icon src="https://cdn.lordicon.com/zheynzsx.json" trigger="click" ></lord-icon></div>
+                <div><lord-icon src="https://cdn.lordicon.com/opzxmgbn.json" trigger="hover" style="display:none"></lord-icon></div>
+            </a>
+        </div>
+    </div>
+    <form id="searchbox" class="form-inline shadow1" role="search" action="/search" method="get">
+        <input name="key" type="text" placeholder="全站搜索">
+        <div class="icon">
+            <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+            <lord-icon src="https://cdn.lordicon.com/xfftupfv.json" trigger="hover"></lord-icon>
+        </div>
+    </form>
+    <div id="main">
+        <div id="queryPanel">
+            <a href="/resource/list?page=0&type=ILLUSTRATION">illustration</a>
+            <a href="/resource/list?page=0&type=BOOKS">BOOKS</a>
+        </div>
+        <div id="main-content">
+            <div class="card" th:each="resource:${resources}">
+                <a class="card-text" th:href="'/resource/page/'+${resource.rid}">
+                    <div class="cover">
+                        <img style="width:200px" th:src="'/img/'+${resource.coverPath}" class="card-img-top" alt="图片加载失败">
+                    </div>
+                    <div class="card-body">
+                        <label class="name" th:text="${resource.name}"></label>
+                        <label class="typelabel" th:text="${resource.type}"></label>
+                    </div>
+                    <div class="resource-card-control"></div>
+                </a>
+            </div>
+        </div>
+        <div id="pageControl" ></div>
+    </div>
+    <script th:inline="javascript">
+        const pageInfo=[[${pageInfo}]];
+        initPageControlButton(pageInfo,document.querySelector("#pageControl"),"/resource/list?page=#{page}");
+    </script>
+</body>
+</html>

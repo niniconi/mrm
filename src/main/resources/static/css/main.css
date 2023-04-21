@@ -1,0 +1,236 @@
+@import url("./bootstrap.min.css");
+
+body{
+    --main-bg-color: #ffffff;
+    --main-nav-color: #ffffff;
+    --main-font-color: #000000;
+    --image-bg-color: #001427;
+    background-color:var(--main-bg-color);
+}
+
+.message{
+    position:absolute;
+    width: 200px;
+    height: 30px;
+    left:50%;
+    right: 50%;
+    top:50px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 25px;
+    background-color: #fff;
+    border:2px solid #777;
+    animation-duration: 1s;
+    animation-name: inside;
+    user-select: none;
+}
+@keyframes inside{
+    0%{
+        top:-200px;
+    }
+    100%{
+        top:50px;
+    }
+}
+/*color:#fb7299*/
+#searchbox{
+    background-color:#fff;
+    width:500px;
+    height:50px;
+    margin-top:20px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:20px;
+    border-radius:25px;
+    padding-left:20px;
+    padding-right:20px;
+}
+.shadow2{
+    box-shadow:
+      1px 0.9px 2.7px rgba(0, 0, 0, 0.056),
+      2.6px 2.3px 6.9px rgba(0, 0, 0, 0.08),
+      5.3px 4.8px 14.2px rgba(0, 0, 0, 0.1),
+      11px 9.9px 29.2px rgba(0, 0, 0, 0.124),
+      30px 27px 80px rgba(0, 0, 0, 0.18)
+    ;
+}
+.shadow1{
+    box-shadow:
+      1px 0.9px 2.7px rgba(0, 0, 0, 0.022),
+      2.6px 2.3px 6.9px rgba(0, 0, 0, 0.031),
+      5.3px 4.8px 14.2px rgba(0, 0, 0, 0.039),
+      11px 9.9px 29.2px rgba(0, 0, 0, 0.048),
+      30px 27px 80px rgba(0, 0, 0, 0.07)
+    ;
+}
+
+#searchbox input{
+    width:415px;
+    outline: none;
+    border:none;
+}
+#searchbox lord-icon{
+    width:45px;
+    height:45px;
+}
+.card{
+    position:relative;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow:
+        1.4px 7px 32.8px rgba(0, 0, 0, 0.035),
+        11px 56px 262px rgba(0, 0, 0, 0.07)
+    ;
+    top:0px;
+    left:0px;
+}
+.up-down:hover{
+    animation-duration:0.5s;
+    animation-name:up;
+    top:-20px;
+}
+.up-down{
+    animation-duration:0.5s;
+    animation-name:down;
+    top:0px;
+}
+.up{
+    animation-duration:0.5s;
+    animation-name:up;
+    top:-20px;
+}
+.down{
+    animation-duration:0.5s;
+    animation-name:down;
+    top:0px;
+}
+@keyframes down{
+    0%{
+        position:relative;
+        top:-20px;
+    }
+    100%{
+        position:relative;
+        top:0px;
+    }
+}
+@keyframes up{
+    0%{
+        position:relative;
+        top:0px;
+    }
+    100%{
+        position:relative;
+        top:-20px;
+    }
+}
+#main{
+    width:30cm;
+    margin-top:30px;
+    margin-bottom:30px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.nav-panel-pc{
+    position:fixed;
+    top:0px;
+    left:0px;
+    height:100%;
+    width:70px;
+    overflow:hidden;
+    z-index:1;
+    background-color:var(--main-nav-color);
+}
+.nav-panel-pc a{
+    display:flex;
+    align-items:center;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    width:200px;
+}
+.nav-panel-pc .label{
+    font-size:20px;
+    padding-left:50px;
+    width:130px;
+    color:#000000;
+    height:30px;
+}
+.nav-panel-pc .options{
+    margin-top:40px;
+}
+@keyframes expand{
+    0%{
+        width:70px;
+    }
+    100%{
+        width:200px;
+    }
+}
+@keyframes collapse{
+    0%{
+        width:200px;
+    }
+    100%{
+        width:70px;
+    }
+
+}
+lord-icon{
+    width:50px;
+    height:50px;
+}
+#pageControl{
+    display:flex;
+    justify-content: center;
+}
+#pageControl a{
+    margin:10px;
+}
+#return-button{
+    position:fixed;
+    top:20px;
+    left:20px;
+}
+.control-panel{
+    position:fixed;
+    background-color: #00000000;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+}
+.control-panel .control-left{
+    width:50%;
+}
+.control-panel .control-right{
+    width:50%;
+}
+.typelabel{
+    display: block;
+}
+.main-div-head{
+    display:flex;
+    height:400px;
+    justify-content: space-between;
+}
+.head-cover{
+    width:280px;
+    overflow:hidden;
+}
+.head-cover img{
+    height:400px;
+}
+.head-tags{
+    padding:20px;
+    width:350px;
+}
+.head-details{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+}
+

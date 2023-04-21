@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${resource.name}"></title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/jquery.slim.min.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <style>
+        #main-div{
+            width:1200px;
+            height:2000px;
+            margin-top:100px;
+            margin-left:auto;
+            margin-right:auto;
+            display:flex;
+            flex-direction:column;
+        }
+        #image-container{
+            margin-top:5px;
+            margin-bottom:5px;
+            margin-left:auto;
+            margin-right:auto;
+            padding-top:10px;
+            width:1100px;
+            display:flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: center
+        }
+        .images{
+            margin:5px;
+            border:1px solid #000000;
+            width:100px;
+            height:140px;
+            overflow:hidden;
+            background-color: var(--image-bg-color);
+            display:flex;
+            align-items:center;
+        }
+        .images img{
+            width:100px;
+        }
+        #control-group{
+            position:absolute;
+            right:20px;
+            top:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="control-group">
+        <button id="control-delete" class="btn btn-primary">delete</button>
+        <a class="button btn-delete">
+            <lord-icon src="https://cdn.lordicon.com/kfzfxczd.json" trigger="click"></lord-icon>
+        </a>
+    </div>
+    <div id="main-div" class="" th:object="${resource}">
+        <div class="main-div-head">
+            <div class="head-cover">
+                <img th:src="'/img/' + *{coverPath}">
+            </div>
+            <div class="head-tags">
+                <div style="height:250px;overflow:hidden;">
+                    <div th:each="tag:${tags}">
+                        <label th:text="${tag.key}"></label>
+                        <a th:each="tagEntity:${tag.value}">
+                            <label th:text="${tagEntity.tag}"></label>
+                            <a th:href="'/tag/deleteTag/' + ${tagEntity.id}">x</a>
+                            <!-- <a th:href="'/tag/updateTag/' + ${tagEntity.id} + '?tagType=0000&tag=fuk&id'+${}">x</a> -->
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <form action="/tag/addTag" method="get">
+                        <div class="form-group">
+                                <label for="tag">tags</label>
+                                <input type="text" name="tag" class="form-control" id="tag">
+                        </div>
+                        <input type="text" th:value="*{rid}" hidden readonly name="rid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="head-details">
+                <h1 th:text="*{name}"></h1>
+                <p th:text="*{uploadDate}"></p>
+                <p th:text="*{filesSize}"></p>
+                <p th:text="*{description}"></p>
+                <h3 th:text="*{type}"></h3>
+            </div>
+        </div>
+        <div class="main-div-body">
+            <div id="image-container">
+                <div class="images" th:each="url:${contentUrls}">
+                    <a th:href="${url.view}">
+                        <img th:src="${url.img}">
+                    </a>
+                </div>
+            </div>
+            <div id="pageControl"></div>
+        </div>
+    </div>
+</body>
+<script th:inline="javascript">
+    const pageInfo = [[${pageInfo}]];
+    initPageControlButton(pageInfo,document.querySelector("#pageControl"),document.URL.substring(0,document.URL.indexOf('?'))+'?page=#{page}');
+    const deleteBtn = document.querySelector("#control-delete");
+    deleteBtn.onclick=function(){
+        console.log("this is resource will be deleted");
+    }
+</script>
+</html>

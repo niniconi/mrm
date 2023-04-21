@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.UserMapper">
+    <select id="count">
+        SELECT COUNT(*) FROM users;
+    </select>
+    <select id="existsByUid">
+        SELECT COUNT(*) FROM users WHERE users.uid=#{uid};
+    </select>
+    <select id="existsByName">
+        SELECT count(*) FROM users WHERE users.username=#{username};
+    </select>
+    <insert id="createAccount">
+        INSERT INTO users(username,password,permission) VALUE(#{username},#{password},#{permission});
+    </insert>
+    <delete id="deleteAccountByUsername">
+        DELETE FROM users WHERE users.username=#{username};
+    </delete>
+    <delete id="deleteAccountByUID">
+        delete from users where users.uid=#{uid};
+    </delete>
+    <update id="modifyPermission">
+        UPDATE users SET permission = #{permission} WHERE uid = #{uid};
+    </update>
+
+    <select id="accountVerify" resultType="java.lang.Character">
+        select permission from users where users.username=#{username} and users.password=#{password};
+    </select>
+    <select id="getUserPermission" resultType="java.lang.Character">
+        select permission from users where users.uid=#{uid};
+    </select>
+    <select id="listUsers" resultType="com.niniconi.mrm.entity.UserEntity">
+        select * from users limit #{limit} offset #{offset};
+    </select>
+    <select id="selectUser" resultType="com.niniconi.mrm.entity.UserEntity">
+        select * from users where users.uid=#{uid};
+    </select>
+    <select id="selectUsersByPermission" resultType="com.niniconi.mrm.entity.UserEntity">
+        select * from users where users.permission=#{permission} limit #{limit} offset #{offset};
+    </select>
+</mapper>

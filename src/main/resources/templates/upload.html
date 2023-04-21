@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>上传</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- <script src="/js/jquery.slim.min.js"></script> -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <style>
+        form{
+            width:15cm;
+            margin-left:auto;
+            margin-right:auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="nav" class="shadow1 nav-panel-pc">
+            <div class="options">
+                <a class="nav" href="/index.html">
+                    <div><lord-icon src="https://cdn.lordicon.com/osuxyevn.json" trigger="click"></lord-icon></div>
+                    <div class="label"><label style="display: none;">主页</label></div>
+                </a>
+                <a class="nav choose" href="/uploadPage">
+                    <div><lord-icon src="https://cdn.lordicon.com/wfadduyp.json" trigger="click"></lord-icon></div>
+                    <div class="label"><label style="display: none;">上传</label></div>
+                </a>
+                <a class="nav" href="/resource/list?page=0">
+                    <div><lord-icon src="https://cdn.lordicon.com/ofwpzftr.json" trigger="click"></lord-icon></div>
+                    <div class="label"><label style="display: none;">全部</label></div>
+                </a>
+                <a class="control">
+                    <div><lord-icon src="https://cdn.lordicon.com/zheynzsx.json" trigger="click" ></lord-icon></div>
+                    <div><lord-icon src="https://cdn.lordicon.com/opzxmgbn.json" trigger="hover" style="display:none"></lord-icon></div>
+                </a>
+            </div>
+        </div>
+
+        <form id="upload-form" onsubmit="return submitData(this)">
+            <div class="form-group">
+                <label for="name">name</label>
+                <input type="text" name="name" class="form-control" id="name" aria-describedby="nameHelp">
+                <small id="nameHelp" class="form-text text-muted"></small>
+            </div>
+            <div class="form-group">
+                <label for="description">description</label>
+                <input type="textarea" name="description" class="form-control" id="description">
+            </div>
+            <div class="form-group">
+                <label for="author">author</label>
+                <input type="text" name="author" class="form-control" id="author">
+            </div>
+            <div class="form-group">
+                <label for="type">type</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="ILLUSTRATION">illustration</option>
+                    <option value="MUSIC">music</option>
+                    <option value="COMICS">comics</option>
+                    <option value="CARTOON">cartoon</option>
+                    <option value="BOOKS">book</option>
+                    <option value="SHORT">short</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tag">tags</label>
+                <input type="text" name="tag" class="form-control" id="tag">
+            </div>
+            <div class="form-group">
+                <label for="cover">cover</label>
+                <input type="file" name="cover" class="form-control-file" id="cover">
+            </div>
+            <div class="form-group">
+                <label for="file">file</label>
+                <div>
+                    <button type="button" class="btn btn-outline-primary" id="file-switch-btn">文件夹</button>
+                    <input type="file" name="file" class="form-control-file" id="file" required="required">
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+    <script>
+        const btn = document.querySelector("#file-switch-btn");
+        const input_file = document.querySelector("#file");
+        btn.onclick = function(){
+            if(!input_file.hasAttribute("webkitdirectory")){
+                console.log("upload dir")
+                btn.textContent = "文件";
+                input_file.setAttribute("webkitdirectory","");
+            }else{
+                console.log("upload file")
+                btn.textContent = "文件夹";
+                input_file.removeAttribute("webkitdirectory");
+            }
+        }
+        const extendFromArg = '<div id="extend-form-arg"></div>';
+        const mvInput =
+            '<div class="form-group">'+
+                '<label for="mv">mv</label>'+
+                '<input type="file" name="mv" class="form-control-file" id="mv">'+
+            '</div>';
+        const bookType = 
+            '<div class="form-group">'+
+                '<label for="bookType">bookType</label>'+
+                '<select name="bookType" id="bookType" class="form-control">'+
+                    '<option value="PDF">pdf</option>'+
+                    '<option value="TXT">txt</option>'+
+                    '<option value="MD">markdown</option>'+
+                '</select>'+
+            '</div>';
+
+        selectType = function(){
+            console.log(this.value);
+            if(document.querySelector("#extend-form-arg") != null){
+                document.querySelector("#extend-form-arg").remove();
+            }
+            document.querySelector("#file").parentElement.parentElement.insertAdjacentHTML('afterend',extendFromArg);
+            const formExtend = document.querySelector("#extend-form-arg");
+
+            switch(this.value){
+                case 'BOOKS':
+                    formExtend.insertAdjacentHTML('beforeend',bookType);
+                    break;
+                case 'MUSIC':
+                    formExtend.insertAdjacentHTML('beforeend',mvInput);
+                    break;
+                case 'SHORT':
+                    break;
+                case 'CARTOON':
+                    break;
+                case 'COMICS':
+                    break;
+            }
+        }
+        submitData = function(){
+            const form = document.querySelector("#upload-form");
+            var formData = new FormData();
+
+            //get the Data
+            formData.append("name",form.querySelector("#name").value);
+            formData.append("description",form.querySelector("#description").value);
+            formData.append("author",form.querySelector("#author").value);
+            formData.append("tag",form.querySelector("#tag").value);
+            formData.append("cover",$(form.querySelector("#cover")).prop("files")[0]);
+            var files = $(form.querySelector("#file")).prop("files");
+            for(let index=0;index<files.length;index++){
+                formData.append("file",files[index]);
+            }
+
+            //get type
+            var type = form.querySelector("#type").value;
+            var postUrl= "/upload/"+type.toString().toLocaleLowerCase();
+            switch(type){
+                case 'BOOKS':
+                    formData.append("bookType",form.querySelector("#bookType").value);
+                    break;
+            }
+
+            $.ajax({
+                url: postUrl,
+                type: 'POST',
+                async: false,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    if(data['status'] == 'SUCCESS'){
+                        createMessageBox(data['message'],document.body,'null')
+                    }else{
+                        createMessageBox(data['message'],document.body,'null')
+                    }
+                }
+            });
+            return false;
+        }
+        document.querySelector("#type").addEventListener("click",selectType,false);
+    </script>
+</html>

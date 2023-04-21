@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.DatabaseUtilMapper">
+    <!-- 判断表是否存在 -->
+    <select id="existsTable" parameterType="string" resultType="java.lang.Integer">
+        SELECT COUNT(*) as count FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'mrm' AND table_name = #{tableName}
+    </select>
+    <update id="createTableTag">
+        CREATE TABLE tag(
+            `res_id`    VARCHAR(64)  NOT NULL   COMMENT '资源ID',
+            `tag_id`    VARCHAR(64)             COMMENT 'TAG ID',
+            `tag_type`  VARCHAR(255)            COMMENT '标签类型',
+            `tag`       VARCHAR(255)            COMMENT '标签',
+            PRIMARY KEY (`tag_id`)
+        ) COMMENT='记录标签的表';
+    <!--    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='调用接口日志表';-->
+    </update>
+    <update id="createTableUsers">
+        CREATE TABLE users(
+            `uid`         BIGINT(20)     AUTO_INCREMENT                COMMENT '用户ID',
+            `username`    VARCHAR(255)   NOT NULL UNIQUE               COMMENT '账户名',
+            `password`    VARCHAR(255)   NOT NULL                      COMMENT '密码',
+            `permission`  TINYINT        NOT NULL                      COMMENT '权限',
+            PRIMARY KEY (`uid`)
+        ) COMMENT='用户表';
+    </update>
+    <update id="createTableResource">
+        create table resource(
+            `rid`                VARCHAR(64)                         COMMENT '标识ID',
+            `name`               VARCHAR(32)                         COMMENT '名字',
+            `file_size`          BIGINT                              COMMENT '大小以字节为单位',
+            `description`        VARCHAR(2000)                       COMMENT '介绍',
+            `upload_date`        DATETIME                            COMMENT '上传日期',
+            `cover`              VARCHAR(64)                         COMMENT '封面',
+            `content`            VARCHAR(64)                         COMMENT '内容',
+            `author`             VARCHAR(32)                         COMMENT '作者',
+            `type`               VARCHAR(32)                         COMMENT '类型',
+            PRIMARY KEY (`rid`),
+            FOREIGN KEY(`cover`) REFERENCES files(`fid`),
+            FOREIGN KEY(`content`) REFERENCES files(`fid`)
+        );
+    </update>
+    <update id="createTableIllustration">
+        create table illustration_res(
+            `rid`                VARCHAR(64)                         COMMENT '',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
+    </update>
+    <update id="createTableComics">
+        create table comics_res(
+            `rid`           VARCHAR(64)                         COMMENT '',
+            `number_comics` SMALLINT                            COMMENT '漫画的章节数',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
+    </update>
+    <update id="createTableCartoon">
+        create table cartoon_res(
+            `rid`              VARCHAR(64)                         COMMENT '',
+            `number_cartoon`   SMALLINT                            COMMENT '动画集数',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
+    </update>
+    <update id="createTableBooks">
+        create table books_res(
+            `rid`             VARCHAR(64)                         COMMENT '',
+            `book_file_type`  VARCHAR(8)                          COMMENT '书籍文件类型',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
+    </update>
+    <update id="createTableMusic">
+        create table music_res(
+            `rid`         VARCHAR(64)                         COMMENT '',
+            `mv`          VARCHAR(64)                         COMMENT 'mv 视频文件',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`),
+            FOREIGN KEY(`mv`) REFERENCES files(`fid`)
+        );
+    </update>
+    <update id="createTableShort">
+        create table short_res(
+            `rid`         VARCHAR(64)                         COMMENT '',
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
+    </update>
+    <update id="createTableFiles">
+        CREATE TABLE files(
+            `fid`      VARCHAR(64)         COMMENT '文件ID',
+            `path`     VARCHAR(8192)       COMMENT '路径',
+            PRIMARY KEY (`fid`)
+        ) COMMENT='文件';
+        <!--
+        //TODO the new files table struct
+        CREATE TABLE files(
+            `fid`         VARCHAR(64),
+            `path`        VARCHAR(8192),
+            `is_file`     BOOLEAN,
+            `is_link`     BOOLEAN,
+            `point_file`  VARCHAR(64),
+            `name`        VARCHAR(255,
+            PRIMARY KEY (`fid`)
+        );
+        -->
+    </update>
+    <update id="createTableGlobalConfig"><!--应该只需要一条记录-->
+        CREATE TABLE global_config(
+            `key` VARCHAR(255) COMMENT '配置项目',
+            `value` VARCHAR(255) COMMENT '数值'
+        );
+    </update>
+    <update id="createTableUserConfig">
+        CREATE TABLE user_config(
+            `uid` BIGINT(20) COMMENT '用户ID',
+            `key` VARCHAR(255) COMMENT '配置项目',
+            `value` VARCHAR(255) COMMENT '数值',
+            FOREIGN KEY(`uid`) REFERENCES users(`uid`)
+        );
+    </update>
+    <update id="createTablePlugins">
+        CREATE TABLE plugins(
+            `jar_class` VARCHAR(48) COMMENT 'plugin 的类',
+            `jar_path` VARCHAR(255) COMMENT 'jar包的相对路径',
+            `jar_name` VARCHAR(20) COMMENT 'plugin 的名称',
+            `logo` VARCHAR(255) COMMENT 'plugin logo 的位置',
+            PRIMARY KEY(`jar_class`)
+        );
+    </update>
+    <update id="createResourceTypeList">
+        CREATE TABLE res_types(
+            `types` VARCHAR(48) UNIQUE
+        ) COMMENT = '用于存储数据库中的资源类型';
+    </update>
+</mapper>

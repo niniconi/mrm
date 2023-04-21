@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.TagMapper">
+    <select id="exists" resultType="java.lang.Integer">
+        select count(*) from tag where res_id=#{rid} and (tag_type=#{tag_type} and tag=#{tag});
+    </select>
+    <delete id="deleteByResID">
+        DELETE FROM tag WHERE tag.res_id=#{res_id};
+    </delete>
+    <delete id="deleteByTagID">
+        DELETE FROM tag WHERE tag.tag_id=#{tag_id};
+    </delete>
+    <insert id="addTag">
+        INSERT INTO tag(res_id,tag_id,tag_type,tag) VALUE(#{res_id},#{tag_id},#{tag_type},#{tag});
+    </insert>
+
+    <select id="getResourceId" resultType="java.lang.String">
+        SELECT
+            tag.res_id
+        FROM tag WHERE tag_id = #{tagId};
+    </select>
+    <select id="getResourceIDByName" resultType="java.lang.String">
+        SELECT
+            tag.res_id
+        FROM tag JOIN resource ON tag.res_id = resource.rid WHERE resource.type=#{type} AND tag.tag_type=#{tag_type} AND tag.tag=#{tag};
+    </select>
+    <select id="getResourceIDByNameNoType" resultType="java.lang.String">
+        SELECT
+            tag.res_id
+        FROM tag WHERE tag.tag_type=#{tag_type} AND tag.tag=#{tag};
+    </select>
+
+    <sql id="tag_entity">
+        tag.res_id AS rid,
+        tag.tag_id AS tagId,
+        tag.tag_type AS tagType,
+        tag.tag
+    </sql>
+    <select id="selectTagByNameNoType" resultType="com.niniconi.mrm.entity.TagEntity">
+        SELECT
+            <include refid="tag_entity"/>
+        FROM tag WHERE tag.tag_type=#{tag_type} AND tag.tag=#{tag};
+    </select>
+    <select id="selectTagByName" resultType="com.niniconi.mrm.entity.TagEntity">
+        SELECT
+            <include refid="tag_entity"/>
+        FROM tag JOIN resource ON tag.res_id = resource.rid WHERE resource.type=#{type} AND tag.tag_type=#{tag_type} AND tag.tag=#{tag};
+    </select>
+    <select id="selectTagByRes" resultType="com.niniconi.mrm.entity.TagEntity">
+        SELECT
+            <include refid="tag_entity"/>
+        FROM tag WHERE tag.res_id=#{res_id};
+    </select>
+    <select id="selectTagByOnlyName" resultType="com.niniconi.mrm.entity.TagEntity">
+        SELECT
+            <include refid="tag_entity"/>
+        FROM tag WHERE tag.tag=#{tag};
+    </select>
+
+    <update id="updateTag">
+        UPDATE tag SET tag_type=#{tagType},tag=#{tag} WHERE tag_id=#{tagId}
+    </update>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.resource.ResourceMapper">
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM resource;
+    </select>
+    <sql id="res_tab">
+        rid,name,file_size,description,upload_date,cover,content,author,type
+    </sql>
+    <sql id="res_entity">
+        rid,
+        name,
+        file_size AS filesSize,
+        description,
+        upload_date AS uploadDate,
+        cover AS coverPath,
+        content AS contentPath,
+        author,
+        type
+    </sql>
+    <select id="getAllResource" resultType="com.niniconi.mrm.entity.resource.ResourceEntity">
+        select
+        <include refid="res_entity"/>
+        from resource LIMIT #{limit} OFFSET #{offset};
+    </select>
+    <insert id="createResource">
+        INSERT INTO resource(<include refid="res_tab"/>) VALUE(#{rid},#{name},#{file_size},#{description},#{upload_date},#{cover},#{content},#{author},#{type});
+    </insert>
+    <select id="getResource" resultType="com.niniconi.mrm.entity.resource.ResourceEntity">
+        SELECT
+        <include refid="res_entity"/>
+        FROM resource WHERE rid=#{rid};
+    </select>
+    <select id="searchByName" resultType="com.niniconi.mrm.entity.resource.ResourceEntity">
+        SELECT
+        <include refid="res_entity"/>
+        FROM resource WHERE name LIKE #{key};
+    </select>
+    <select id="getType" resultType="com.niniconi.mrm.entity.enumeration.ResourceType">
+        SELECT type FROM resource WHERE rid=#{rid};
+    </select>
+    <select id="getResourceIdByType" resultType="java.lang.String">
+        SELECT resource.rid FROM resource WHERE type=#{type};
+    </select>
+    <select id="saveAllResource" resultType="com.niniconi.mrm.entity.resource.ResourceEntity">
+        SELECT <include refid="res_entity"/> FROM resource;
+    </select>
+    <delete id="delete">
+        DELETE FROM resource WHERE rid=#{rid};
+    </delete>
+    <select id="sizeCount" resultType="java.lang.Long">
+        SELECT SUM(file_size) FROM resource;
+    </select>
+</mapper>

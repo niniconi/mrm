@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>console</title>
+    <script src="/js/jquery.js"></script>
+    <!-- <script src="/js/jquery.slim.min.js"></script> -->
+    <script src="/js/highcharts.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div id="HdPanel"></div>
+        <div id="ResourcePanel">
+            <label class="count"></label>
+            <label class="size-count"></label>
+        </div>
+    </div>
+    <script>
+        Highcharts.setOptions({
+            global : {
+                useUTC : false
+            }
+        });
+        var diskchart = {
+            chart:{
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title:{
+                text: 'null'
+            },
+            tooltip:{
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions:{ 
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series:[{
+                type: 'pie',
+                name: 'disk',
+                data: [
+                    ['used',   0.0],
+                    ['free',   100.0],
+                ]
+            }]
+        };
+        var diskinfo = [];
+
+        haveDiskInfo = function(name){
+            for(index in diskinfo){
+                if(diskinfo[index].title.textStr == name){
+                    return true;
+                }
+            }
+        }
+        indexOfDiskInfo = function(name){
+            for(index in diskinfo){
+                if(diskinfo[index].title.textStr == name){
+                    return index;
+                }
+            }
+        }
+        //get infos
+        setInterval(()=>{
+            //get hdinfo
+            $.get("/info/HdInfo",(data,status)=>{
+                if(status == 'success'){
+                    for(key in data){
+                        const id = "chart-"+hashVal(key);
+                        const used = data[key]["usableSpace"];
+                        const free = data[key]["freeSpace"];
+                        const total = data[key]["totalSpace"];
+                        if(!haveDiskInfo(key)){
+                            diskchart.title.text=key;
+                            diskchart.series[0].data[0][1] = used/total;
+                            diskchart.series[0].data[1][1] = free/total;
+                            var json ={};
+                            json.chart = diskchart.chart;
+                            json.title = diskchart.title;
+                            json.tooltip = diskchart.tooltip;
+                            json.series = diskchart.series;
+                            json.plotOptions = diskchart.plotOptions;
+
+                            const element = $('<div class="HdChart"><div class="pie"></div><div class="hdinfo"></div></div>');
+                            element.find(".pie").attr('id',id);
+                            element.find(".hdinfo").html(
+                                "<label>used:"+formatSize(used,2)+"</label>"+
+                                "<label>free:"+formatSize(free,2)+"</label>"+
+                                "<label>total:"+formatSize(total,2)+"</label>");
+                            element.appendTo("#HdPanel");
+
+                            var chart = Highcharts.chart(id,json);
+                            diskinfo.push(chart);
+                        }else{
+                            $(document.querySelector("#"+id).parentElement).find(".hdinfo").html(
+                                "<label>used:"+formatSize(used,2)+"</label>"+
+                                "<label>free:"+formatSize(free,2)+"</label>"+
+                                "<label>total:"+formatSize(total,2)+"</label>");
+                            diskinfo[indexOfDiskInfo(key)].series[0].update(
+                                {
+                                    animation: false,
+                                    data:[
+                                        ['used',(used/total)],
+                                        ['free',(free/total)]
+                                    ]
+                                }
+                            );
+                        }
+                    }
+                }
+            })
+            $.get("/info/ResourceCount",(data,status)=>{
+                if(status == 'success'){
+                    $("#ResourcePanel .count").text(data+"个");
+                }
+            });
+            $.get("/info/ResourceSizeCount",(data,status)=>{
+                if(status == 'success'){
+                    $("#ResourcePanel .size-count").text(formatSize(data,2));
+                }
+            });
+        },1000);
+    </script>
+</body>
+</html>

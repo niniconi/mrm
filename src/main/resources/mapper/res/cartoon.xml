@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niniconi.mrm.mapper.resource.CartoonMapper">
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM cartoon_res;
+    </select>
+    <insert id="createCartoon">
+        INSERT INTO cartoon_res(rid,number_cartoon) value(#{rid},1);
+    </insert>
+    <select id="getCartoon" resultType="com.niniconi.mrm.entity.resource.CartoonEntity">
+        SELECT
+            res.rid,
+            res.name,
+            res.file_size AS filesSize,
+            res.description,
+            res.upload_date AS uploadDate,
+            res.cover AS coverPath,
+            res.content AS contentPath,
+            res.author,
+            res.type,
+            cartoon.number_cartoon AS numberOfCartoon
+        FROM resource res JOIN cartoon_res cartoon ON res.rid=cartoon.rid WHERE res.rid=#{rid};
+    </select>
+    <delete id="delete">
+        DELETE FROM cartoon_res WHERE rid=#{rid};
+    </delete>
+</mapper>

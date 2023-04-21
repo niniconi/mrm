@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.slim.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
+    <script th:inline="javascript">
+        const pageInfo=[[${pageInfo}]];
+    </script>
+    <style>
+        body{
+            position: absolute;
+            top:0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            background-color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index:0;
+        }
+        #picture{
+        }
+    </style>
+</head>
+<body>
+    <video th:src="${src}" controls></video>
+</body>
+</html>
