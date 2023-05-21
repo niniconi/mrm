@@ -87,6 +87,9 @@ public class PluginService {
         return new MessageEntity(MessageStatus.SUCCESS,"install plugin success");
     }
 
+    /**
+     * 加载所有以注册的插件
+     */
     public void loadInstalledPlugins(){
         List<PluginEntity> plugins = plugin.getAllPlugin();
         String jarFid;

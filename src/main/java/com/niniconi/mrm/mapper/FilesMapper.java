@@ -21,6 +21,10 @@ public interface FilesMapper {
      */
     String getPath(@Param("fid") String fid);
 
+    /**
+     * 删除文件
+     * @param fid 文件的描述ID
+     */
     void deleteFile(@Param("fid") String fid);
     void addFile(@Param("fid") String fid,@Param("path") String path);
 

@@ -383,6 +383,9 @@ public class FileService {
         return true;
     }
 
+    /**
+     * 仅删除数据库中的文件描述信息
+     */
     public void deleteFileOnlyDatabase(String fid){
         filesMapper.deleteFile(fid);
     }

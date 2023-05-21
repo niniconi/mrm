@@ -1,5 +1,8 @@
 package com.niniconi.plugin.api.res;
 
+/**
+ * 用于插件在注册自己所控制的资源类型对应表中的字段类型及属性
+ */
 public class FieldEntity {
     private String fieldLabel;
     private Type type;
@@ -69,6 +72,10 @@ public class FieldEntity {
         this.defaultVar = defaultVar;
     }
 
+    /**
+     * 这个用于生成部分SQL语句，用于表示建表时的字段及其属性
+     * @return 生成的SQL语句
+     */
     @Override
     public String toString() {
         String field  = '`'+fieldLabel+'`';

@@ -14,6 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用于管理资源的Tag
+ */
 @Slf4j
 @Service
 public class TagService {
