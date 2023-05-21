@@ -125,7 +125,18 @@
     </update>
     <update id="createResourceTypeList">
         CREATE TABLE res_types(
-            `types` VARCHAR(48) UNIQUE
+            `types` VARCHAR(48) UNIQUE COMMENT '类型',
+            `origin` VARCHAR(48) COMMENT '类型来自那个插件',
+            FOREIGN KEY(`origin`) REFERENCES plugins(`jar_class`)
         ) COMMENT = '用于存储数据库中的资源类型';
+    </update>
+    <update id="createResourceTable">
+        CREATE TABLE ${name}_res(
+            `rid` VARCHAR(64),
+            <foreach collection="fields" item="field" separator="," close=",">
+                ${field}
+            </foreach>
+            FOREIGN KEY(`rid`) REFERENCES resource(`rid`)
+        );
     </update>
 </mapper>

@@ -1,6 +1,9 @@
 package com.niniconi.mrm.mapper;
 
+import com.niniconi.plugin.api.res.FieldEntity;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface DatabaseUtilMapper {
     /**
@@ -41,4 +44,6 @@ public interface DatabaseUtilMapper {
     void createTableResource();
 
     void createTablePlugins();
+    void createResourceTypeList();
+    void createResourceTable(@Param("name") String name, @Param("fields") List<FieldEntity> fields);
 }

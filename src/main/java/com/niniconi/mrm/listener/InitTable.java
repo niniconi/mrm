@@ -3,6 +3,8 @@ package com.niniconi.mrm.listener;
 import com.niniconi.mrm.plugin.PluginService;
 import com.niniconi.mrm.service.DatabaseUtilService;
 import com.niniconi.mrm.service.UserService;
+import com.niniconi.mrm.service.resource.TypeRegisterService;
+import com.niniconi.plugin.api.res.FieldEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -21,6 +23,9 @@ public class InitTable implements ApplicationListener<ApplicationReadyEvent> {
     public UserService userService;
     @Resource
     public PluginService pluginService;
+
+    @Resource
+    TypeRegisterService typeRegisterService;
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         //create table if it's exists.
@@ -71,7 +76,12 @@ public class InitTable implements ApplicationListener<ApplicationReadyEvent> {
         }
         if(!databaseUtilService.existsTable("plugins")){
             databaseUtilService.createTablePlugins();
+            pluginService.init();
             log.info("create table plugins");
+        }
+        if(!databaseUtilService.existsTable("res_types")){
+            databaseUtilService.initResourceTypeList();
+            log.info("create table res_types");
         }
         //load plugins
         pluginService.loadInstalledPlugins();

@@ -4,13 +4,16 @@ import com.niniconi.mrm.mapper.DatabaseUtilMapper;
 import com.niniconi.mrm.mapper.FilesMapper;
 import com.niniconi.mrm.mapper.config.Config;
 import com.niniconi.mrm.mapper.config.GlobalConfig;
+import com.niniconi.mrm.mapper.resource.ResTypeMapper;
 import com.niniconi.mrm.mapper.resource.ResourceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,6 +30,8 @@ public class DatabaseUtilService {
     public ResourceMapper res;
     @Resource
     public FilesMapper filesMapper;
+    @Resource
+    public ResTypeMapper resType;
 
     /**
      * 判断表是否存在
@@ -110,5 +115,15 @@ public class DatabaseUtilService {
         ret.put("resource",res.saveAllResource());
         ret.put("files",filesMapper.saveAllFiles());
         return ret;
+    }
+
+    public void initResourceTypeList(){
+        databaseUtil.createResourceTypeList();
+        resType.add("MUSIC");
+        resType.add("COMICS");
+        resType.add("CARTOON");
+        resType.add("ILLUSTRATION");
+        resType.add("BOOKS");
+        resType.add("SHORT");
     }
 }

@@ -89,9 +89,12 @@ public class PluginService {
 
     public void loadInstalledPlugins(){
         List<PluginEntity> plugins = plugin.getAllPlugin();
+        String jarFid;
         for (PluginEntity plugin:plugins) {
             try {
-                load(plugin.getJarPath());
+                jarFid = plugin.getJarPath();
+                if (jarFid != null)load(jarFid);
+                else continue;
             } catch (ClassNotFoundException | IOException e) {
                 log.error("load plugin "+plugin.getClassName()+"failed");
                 e.printStackTrace();
@@ -105,4 +108,9 @@ public class PluginService {
         return plugin.getAllPlugin();
     }
 
+    public void init(){
+        String classname = getClass().getPackage().getName();
+        classname = classname.substring(0,classname.lastIndexOf('.'));
+        plugin.addPlugin(classname,null,"mrm");
+    }
 }
